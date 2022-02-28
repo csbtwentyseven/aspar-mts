@@ -1,0 +1,5 @@
+çalışma doyasını düzenle,
+olmayan bir müşteri numarasına eldiven girildiğinde denetle
+radio butonlarını fonksiyonlandır.
+
+ui label yazıyı güncellemeye çalış, python async ve qthread öğren.
