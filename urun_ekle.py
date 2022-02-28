@@ -1,8 +1,9 @@
 #C.SAID BERK TARAFINDAN ASPAR ENERJI ICIN HAZIRLANMISTIR.
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QButtonGroup
+
 import firestore
 
 class Ui_UrunEkle(object):
@@ -95,6 +96,28 @@ class Ui_UrunEkle(object):
         self.radioButton_3.setObjectName("radioButton_3")
         self.horizontalLayout_3.addWidget(self.radioButton_3)
         self.verticalLayout.addLayout(self.horizontalLayout_3)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.radioButton_standart = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        font = QtGui.QFont()
+        font.setFamily("Roboto Condensed")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.radioButton_standart.setFont(font)
+        self.radioButton_standart.setObjectName("radioButton_standart")
+        self.horizontalLayout_2.addWidget(self.radioButton_standart)
+        self.radioButton_arc = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        font = QtGui.QFont()
+        font.setFamily("Roboto Condensed")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.radioButton_arc.setFont(font)
+        self.radioButton_arc.setObjectName("radioButton_arc")
+        self.horizontalLayout_2.addWidget(self.radioButton_arc)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.serni_numara_kaydet_buton = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.serni_numara_kaydet_buton.setMinimumSize(QtCore.QSize(0, 75))
         self.serni_numara_kaydet_buton.setMaximumSize(QtCore.QSize(16777215, 75))
@@ -134,48 +157,67 @@ class Ui_UrunEkle(object):
         EldivenEkle.setCentralWidget(self.centralwidget)
 
         self.pixmap = QPixmap('logo_kucuk.jpg')
+        self.classGrup = QButtonGroup(EldivenEkle)
+        self.standartArcGrup = QButtonGroup(EldivenEkle)
+
+        self.classGrup.addButton(self.radioButton)
+        self.classGrup.addButton(self.radioButton_2)
+        self.classGrup.addButton(self.radioButton_3)
+
+        self.standartArcGrup.addButton(self.radioButton_standart)
+        self.standartArcGrup.addButton(self.radioButton_arc)
 
         self.retranslateUi(EldivenEkle)
         QtCore.QMetaObject.connectSlotsByName(EldivenEkle)
 
+    def urun_kaydet(self):
+        radioStandartArcBilgi = self.standartarc_radioButonKontrol()
+        radioClassBilgi = self.class_radioButonKontrol()
+        serino_liste = self.plainTextEdit.toPlainText().strip().split("\n")
+        musteri_no = self.musteri_numarasi_line.text()
 
+        firestore_db = firestore.Firestore(musteri_no=musteri_no, class_bilgisi=radioClassBilgi, serino_liste=serino_liste, standart_arc=radioStandartArcBilgi)
+        try:
+            firestore_db.urun_ekle()
+            self.bilgilendirme_label.setText("Ürün Ekleme Başarılı")
+        except ValueError as hata:
+            self.bilgilendirme_label.setText(str(hata))
 
-    def radioButonKontrol(self):
-        if(self.radioButton.isChecked()):
+    def class_radioButonKontrol(self):
+        if (self.radioButton.isChecked()):
             return self.radioButton.text()
 
-        elif(self.radioButton_2.isChecked()):
+        elif (self.radioButton_2.isChecked()):
             return self.radioButton_2.text()
 
-        elif(self.radioButton_3.isChecked()):
+        elif (self.radioButton_3.isChecked()):
             return self.radioButton_3.text()
+
+    def standartarc_radioButonKontrol(self):
+        if (self.radioButton_standart.isChecked()):
+            return self.radioButton_standart.text()
+
+        elif (self.radioButton_arc.isChecked()):
+            return self.radioButton_arc.text()
+
 
     def retranslateUi(self, EldivenEkle):
         _translate = QtCore.QCoreApplication.translate
-        EldivenEkle.setWindowTitle(_translate("EldivenEkle", "Ürün Ekle"))
+        EldivenEkle.setWindowTitle(_translate("EldivenEkle", "Eldiven Ekle"))
         self.logo.setText(_translate("EldivenEkle", "logo"))
         self.musteri_numarasi_label.setText(_translate("EldivenEkle", "Müşteri Numarası: "))
         self.plainTextEdit.setPlaceholderText(_translate("EldivenEkle", "LÜTFEN SERİ NUMARALARINI ALT ALTA GELECEK ŞEKİLDE EKLEYİN"))
         self.radioButton.setText(_translate("EldivenEkle", "CLASS 0"))
         self.radioButton_2.setText(_translate("EldivenEkle", "CLASS 00"))
         self.radioButton_3.setText(_translate("EldivenEkle", "CLASS 4"))
+        self.radioButton_standart.setText(_translate("EldivenEkle", "STANDART"))
+        self.radioButton_arc.setText(_translate("EldivenEkle", "ARC"))
         self.serni_numara_kaydet_buton.setText(_translate("EldivenEkle", "Seri Numaralarını Kaydet"))
 
         self.logo.setPixmap(self.pixmap)
 
         self.serni_numara_kaydet_buton.clicked.connect(self.urun_kaydet)
 
-    def urun_kaydet(self):
-        radioClassBilgi = self.radioButonKontrol()
-        serino_liste = self.plainTextEdit.toPlainText().strip().split("\n")
-        musteri_no = self.musteri_numarasi_line.text()
-
-        firestore_db = firestore.Firestore(musteri_no=musteri_no, class_bilgisi=radioClassBilgi, serino_liste=serino_liste)
-        try:
-            firestore_db.urun_ekle()
-            self.bilgilendirme_label.setText("Ürün Ekleme Başarılı")
-        except ValueError as hata:
-            self.bilgilendirme_label.setText(str(hata))
 
 
 

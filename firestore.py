@@ -7,23 +7,24 @@ class Firestore:
     ana_veritabani_key = fk.FirebaseKurulum()
     db = ana_veritabani_key.firestore_erisim()
 
-    def __init__(self,musteri_no = None, class_bilgisi = None, serino_liste = None, musteri_adi = None):
+    def __init__(self,musteri_no = None, class_bilgisi = None, serino_liste = None, musteri_adi = None, standart_arc = None):
         self.musteri_no = musteri_no
         self.class_bilgisi = class_bilgisi
         self.serino_liste = serino_liste
         self.musteri_adi = musteri_adi
+        self.standart_arc = standart_arc
 
     def urun_ekle(self):
 
         if (self.musteri_no_kontrol(musteriNo=self.musteri_no) == False):
             musteri_noUYGUN = "{}".format(self.musteri_no)
             class_noUYGUN = "{}".format(self.class_bilgisi)
+            standart_arcUYGUN = "{}".format(self.standart_arc)
 
             yazilan_oge = 1
             for i in self.serino_liste:
                 seri_noUYGUN = "{}".format(i)
-                self.db.collection("Musteriler").document(musteri_noUYGUN).collection(class_noUYGUN).document(
-                    seri_noUYGUN).set({"Seri No": "{}".format(seri_noUYGUN)})
+                self.db.collection("Musteriler").document(musteri_noUYGUN).collection(standart_arcUYGUN).document(class_noUYGUN).collection(seri_noUYGUN).document(seri_noUYGUN).set({"Seri No": "{}".format(seri_noUYGUN)})
                 print("{}/{} öge yazildi".format(yazilan_oge, len(self.serino_liste)))
                 yazilan_oge = yazilan_oge + 1
 
@@ -43,7 +44,6 @@ class Firestore:
         for musteriler in self.kontrolcu:
             if(musteriler.id == musteriNo):
                 return False
-
         return True
 
 

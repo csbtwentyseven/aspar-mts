@@ -200,7 +200,6 @@ class Ui_girisyap(object):
 
                 else:
                         self.label.setText("Giriş Başarısız.")
-                        print("Giris Basarisiz")
         except:
                 self.label.setText("Lütfen İnternet Bağlantınızı Kontrol Ediniz.")
 

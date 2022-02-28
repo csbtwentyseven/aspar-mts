@@ -10,8 +10,6 @@ class Authentication:
             fk.FirebaseKurulum.auth.sign_in_with_email_and_password(self.eposta,self.sifre)
             return True
         except Exception as e:
-            print("Hata")
-            print(e)
             return False
 
 

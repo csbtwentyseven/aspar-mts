@@ -169,7 +169,6 @@ class Ui_MusteriOlustur(object):
         musteri_numarasi = self.musteri_numarasi_lineedit.text()
 
         firestore_db = firestore.Firestore(musteri_no=musteri_numarasi, musteri_adi=musteri_adi)
-
         try:
             firestore_db.musteri_ekle()
             self.bilgi_label.setText("Müşteri Başarıyla Eklendi!")
