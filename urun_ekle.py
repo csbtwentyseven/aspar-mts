@@ -217,15 +217,3 @@ class Ui_UrunEkle(object):
         self.logo.setPixmap(self.pixmap)
 
         self.serni_numara_kaydet_buton.clicked.connect(self.urun_kaydet)
-
-
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    EldivenEkle = QtWidgets.QMainWindow()
-    ui = Ui_UrunEkle()
-    ui.setupUi(EldivenEkle)
-    EldivenEkle.show()
-    sys.exit(app.exec_())
